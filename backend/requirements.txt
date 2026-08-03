@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+sqlalchemy
+psycopg2-binary
+pgvector
+pydantic
+pydantic-settings
+python-multipart
+httpx
+python-jose[cryptography]
+passlib
+bcrypt==3.2.2
+python-dotenv
+groq
