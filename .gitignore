@@ -19,3 +19,8 @@ node_modules/
 
 # OS
 .DS_Store
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
