@@ -71,7 +71,7 @@ export function AssistantChat({
       
       // Perform direct search
       setIsLoading(true)
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"
+      const API_URL = process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/api` : "http://localhost:8000/api"
       fetch(`${API_URL}/search/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -160,7 +160,7 @@ export function AssistantChat({
     setIsLoading(true)
 
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"
+      const API_URL = process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/api` : "http://localhost:8000/api"
       const res = await fetch(`${API_URL}/ai/analyze`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -183,7 +183,7 @@ export function AssistantChat({
       // Attempt to search via backend
       let matchedProviders: any[] = []
       try {
-        const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"
+        const API_URL = process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/api` : "http://localhost:8000/api"
         const searchRes = await fetch(`${API_URL}/search/`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },

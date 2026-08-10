@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import { MessageCircle, ArrowLeft, Send, Loader2 } from "lucide-react"
 import { useProviderDashboard } from "@/lib/api/hooks"
 
-const API = process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/chat` : "http://localhost:8000/api/chat"
+const API = process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/api/chat` : "http://localhost:8000/api/chat"
 
 type Mensaje = { id: string; texto: string; remitente: "cliente" | "prestador"; created_at?: string }
 type Conversacion = { id: number; cliente_username: string; prestador_nombre: string; prestador_categoria: string; ultimo_mensaje?: string; updated_at?: string }

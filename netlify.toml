@@ -3,7 +3,7 @@
   publish = ".next"
 
 [build.environment]
-  NEXT_PUBLIC_API_URL = "https://chambista.onrender.com/api"
+  NEXT_PUBLIC_API_URL = "https://chambista.onrender.com"
   NODE_VERSION = "20"
 
 [[plugins]]
