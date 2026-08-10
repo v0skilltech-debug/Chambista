@@ -145,7 +145,7 @@ export function OnboardingWizard() {
     if (!nombre || !email || !password) return
     setRegistering(true)
     try {
-      const res = await fetch('http://localhost:8000/api/auth/register', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nombre, email, password, rol }),
@@ -157,7 +157,7 @@ export function OnboardingWizard() {
         return
       }
       // Auto-login
-      const lr = await fetch('http://localhost:8000/api/auth/login', {
+      const lr = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -201,7 +201,7 @@ export function OnboardingWizard() {
 
     try {
       // Obtener el ID del usuario actual
-      const meRes = await fetch('http://localhost:8000/api/auth/me', {
+      const meRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/auth/me`, {
         headers: { Authorization: `Bearer ${token}` }
       })
 
@@ -230,7 +230,7 @@ export function OnboardingWizard() {
         precio_referencial: data.precioReferencial,
       }
 
-      await fetch('http://localhost:8000/api/providers/perfil', {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/providers/perfil`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

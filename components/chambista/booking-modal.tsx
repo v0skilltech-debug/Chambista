@@ -33,7 +33,7 @@ export function BookingModal({
       // Pedir al backend el ID del usuario actual usando el token
       let clienteId: number | null = null
       if (token) {
-        const meRes = await fetch("http://localhost:8000/api/auth/me", {
+        const meRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/auth/me`, {
           headers: { Authorization: `Bearer ${token}` }
         })
         if (meRes.ok) {
@@ -58,7 +58,7 @@ export function BookingModal({
         descripcion: problema
       }
 
-      const res = await fetch("http://localhost:8000/api/bookings/", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/bookings/`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",

@@ -26,7 +26,7 @@ export function HomeScreen({
   const [loadingProviders, setLoadingProviders] = useState(true)
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/providers/")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/providers/`)
       .then(r => r.json())
       .then(data => {
         if (Array.isArray(data)) {

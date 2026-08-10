@@ -68,7 +68,7 @@ export function OnboardingClienteWizard() {
     setLoading(true)
     try {
       // 1. Register
-      const res = await fetch('http://localhost:8000/api/auth/register', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -87,7 +87,7 @@ export function OnboardingClienteWizard() {
       }
 
       // 2. Auto-login
-      const lr = await fetch('http://localhost:8000/api/auth/login', {
+      const lr = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: data.email, password: data.password }),
@@ -102,7 +102,7 @@ export function OnboardingClienteWizard() {
       // 3. Save client profile
       const token = localStorage.getItem('chambista_token')
       if (token) {
-        await fetch('http://localhost:8000/api/clientes/perfil', {
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/clientes/perfil`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

@@ -32,7 +32,7 @@ export function AuthScreen() {
         rol: accountType
         // telefono is optional, omitted on purpose
       }
-      const res = await fetch("http://localhost:8000/api/auth/register", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
@@ -44,7 +44,7 @@ export function AuthScreen() {
       }
 
       // Auto login inmediato
-      const loginRes = await fetch("http://localhost:8000/api/auth/login", {
+      const loginRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
@@ -70,7 +70,7 @@ export function AuthScreen() {
     e.preventDefault()
     setLoginError("")
     try {
-      const res = await fetch("http://localhost:8000/api/auth/login", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
@@ -199,7 +199,7 @@ export function AuthScreen() {
                     onBlur={async () => {
                       if (email && email.includes("@")) {
                         try {
-                          const res = await fetch(`http://localhost:8000/api/auth/check-email?email=${encodeURIComponent(email)}`)
+                          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/auth/check-email?email=${encodeURIComponent(email)}`)
                           const data = await res.json()
                           if (!data.exists) {
                             setEmailHint("Este correo no está registrado. ¿Quieres crear una cuenta?")

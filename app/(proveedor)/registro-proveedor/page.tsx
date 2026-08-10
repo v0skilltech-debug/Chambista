@@ -33,7 +33,7 @@ export default function RegistroProveedor() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8000/api/providers/register", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/providers/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

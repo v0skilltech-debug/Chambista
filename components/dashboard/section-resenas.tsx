@@ -42,12 +42,12 @@ export function SectionResenas() {
     if (!token) return
 
     setLoadingReviews(true)
-    fetch("http://localhost:8000/api/auth/me", {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/auth/me`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(r => r.json())
     .then(me => {
-      return fetch(`http://localhost:8000/api/reviews/provider/${me.id}`)
+      return fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/reviews/provider/${me.id}`)
     })
     .then(r => r.json())
     .then(data => {
