@@ -100,9 +100,9 @@ export function DashboardShell() {
   )
 
   return (
-    <div className="min-h-dvh bg-background lg:flex">
+    <div className="min-h-dvh bg-white lg:flex">
       {/* Sidebar desktop */}
-      <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-r bg-sidebar p-4 lg:flex">
+      <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-r border-border bg-white p-4 shadow-sm lg:flex">
         <div className="px-2 py-2">
           <ChambistaLogo />
         </div>

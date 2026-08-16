@@ -7,7 +7,7 @@ import { ChambistaLogo } from '@/components/chambista-logo'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { CIUDADES, DISTRITOS_LIMA, categories } from '@/lib/chambista-data'
+import { CIUDADES, DISTRITOS_POR_CIUDAD, categories } from '@/lib/chambista-data'
 
 type ClienteData = {
   nombre: string
@@ -264,7 +264,7 @@ export function OnboardingClienteWizard() {
             <div className="space-y-2">
               <Label>Distrito *</Label>
               <div className="flex flex-wrap gap-2 max-h-48 overflow-y-auto pr-1">
-                {DISTRITOS_LIMA.map((d) => (
+                {(DISTRITOS_POR_CIUDAD[data.ciudad] || []).map((d) => (
                   <button
                     key={d}
                     type="button"

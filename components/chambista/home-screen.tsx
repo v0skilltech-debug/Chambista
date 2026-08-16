@@ -94,7 +94,7 @@ export function HomeScreen({
                   featured: true,
                   tagline: `Especialista en ${p.oficio_principal || "servicios del hogar"}`,
                 })}
-                className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4 text-left transition hover:border-primary/40 hover:bg-muted/50 active:scale-[0.98]"
+                className="flex items-center gap-3 rounded-2xl border border-border bg-white p-4 text-left shadow-sm shadow-foreground/5 transition hover:shadow-md hover:shadow-primary/10 hover:border-primary/30 active:scale-[0.98]"
               >
                 <div className="relative shrink-0">
                   <img
@@ -131,7 +131,7 @@ export function HomeScreen({
 
       {/* Quick stats banner */}
       <section className="px-4 lg:px-8">
-        <div className="rounded-2xl bg-gradient-to-r from-primary to-primary/80 p-6 text-primary-foreground">
+        <div className="rounded-2xl bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 p-6 text-white">
           <p className="text-sm font-medium opacity-80 mb-1">Chambista en números</p>
           <h3 className="text-2xl font-extrabold mb-4">La plataforma que conecta el Perú</h3>
           <div className="grid grid-cols-3 gap-4">

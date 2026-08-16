@@ -167,6 +167,19 @@ export function OnboardingWizard() {
         localStorage.setItem('chambista_token', ld.access_token)
         localStorage.setItem('chambista_rol', ld.rol)
         localStorage.setItem('chambista_nombre', ld.nombre || nombre)
+        
+        // Auto-fill wizard data based on selected role and name
+        const parts = nombre.trim().split(' ')
+        const splitIndex = Math.ceil(parts.length / 2)
+        const firstNames = parts.slice(0, splitIndex).join(' ')
+        const lastNames = parts.slice(splitIndex).join(' ')
+        
+        update({
+          tipoCuenta: rol === 'empresa' ? 'empresa' : 'natural',
+          razonSocial: rol === 'empresa' ? nombre : '',
+          nombres: rol !== 'empresa' ? firstNames : '',
+          apellidos: rol !== 'empresa' ? lastNames : '',
+        })
       }
       setAccountDone(true)
     } catch {
