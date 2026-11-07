@@ -48,43 +48,43 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* === LIGHT THEME (Unified for all) === */
+/* === LIGHT THEME (Unified with Chambista HTML Branding) === */
 :root, .dark, .force-light {
   color-scheme: light !important;
-  --background: oklch(1 0 0) !important; /* White background */
-  --foreground: oklch(0.2 0.02 260) !important; /* Dark slate */
-  --card: oklch(1 0 0) !important;
-  --card-foreground: oklch(0.2 0.02 260) !important;
-  --popover: oklch(1 0 0) !important;
-  --popover-foreground: oklch(0.2 0.02 260) !important;
-  --primary: oklch(0.55 0.22 260) !important; /* Vibrant Blue */
-  --primary-foreground: oklch(1 0 0) !important;
-  --secondary: oklch(0.68 0.2 40) !important; /* Vibrant Orange/Coral */
-  --secondary-foreground: oklch(1 0 0) !important;
-  --muted: oklch(0.96 0.01 250) !important;
-  --muted-foreground: oklch(0.5 0.02 260) !important;
-  --accent: oklch(0.96 0.01 250) !important;
-  --accent-foreground: oklch(0.2 0.02 260) !important;
-  --destructive: oklch(0.6 0.2 25) !important;
-  --border: oklch(0.92 0.01 250) !important;
-  --input: oklch(0.92 0.01 250) !important;
-  --ring: oklch(0.55 0.22 260) !important;
-  --chart-1: oklch(0.55 0.22 260) !important;
-  --chart-2: oklch(0.68 0.2 40) !important;
-  --chart-3: oklch(0.55 0.12 145) !important;
-  --chart-4: oklch(0.75 0.14 85) !important;
-  --chart-5: oklch(0.5 0.02 60) !important;
+  --background: #ffffff !important;
+  --foreground: #162044 !important; /* Ink de Chambista */
+  --card: #ffffff !important;
+  --card-foreground: #162044 !important;
+  --popover: #ffffff !important;
+  --popover-foreground: #162044 !important;
+  --primary: #ff8a00 !important; /* Naranja Oficial Chambista */
+  --primary-foreground: #ffffff !important;
+  --secondary: #0e1b5b !important; /* Azul Marino Oficial Chambista */
+  --secondary-foreground: #ffffff !important;
+  --muted: #eef2f5 !important; /* Gris suave */
+  --muted-foreground: #65708a !important;
+  --accent: #fff8f1 !important; /* Crema claro */
+  --accent-foreground: #ff6a00 !important;
+  --destructive: #ef4444 !important;
+  --border: #dfe5eb !important;
+  --input: #dfe5eb !important;
+  --ring: #ff8a00 !important;
+  --chart-1: #ff8a00 !important;
+  --chart-2: #0e1b5b !important;
+  --chart-3: #22c7c9 !important; /* Turquesa */
+  --chart-4: #ff6a00 !important;
+  --chart-5: #178a68 !important;
   --radius: 1rem !important; /* Rounder corners globally */
-  --sidebar: oklch(0.98 0.005 250) !important;
-  --sidebar-foreground: oklch(0.2 0.02 260) !important;
-  --sidebar-primary: oklch(0.55 0.22 260) !important;
-  --sidebar-primary-foreground: oklch(1 0 0) !important;
-  --sidebar-accent: oklch(0.96 0.01 250) !important;
-  --sidebar-accent-foreground: oklch(0.2 0.02 260) !important;
-  --sidebar-border: oklch(0.92 0.01 250) !important;
-  --sidebar-ring: oklch(0.55 0.22 260) !important;
-  background-color: oklch(1 0 0) !important;
-  color: oklch(0.2 0.02 260) !important;
+  --sidebar: #0e1b5b !important;
+  --sidebar-foreground: #ffffff !important;
+  --sidebar-primary: #ff8a00 !important;
+  --sidebar-primary-foreground: #ffffff !important;
+  --sidebar-accent: rgba(255, 255, 255, 0.1) !important;
+  --sidebar-accent-foreground: #ffffff !important;
+  --sidebar-border: rgba(255, 255, 255, 0.15) !important;
+  --sidebar-ring: #ff8a00 !important;
+  background-color: #ffffff !important;
+  color: #162044 !important;
 }
 
 @layer base {

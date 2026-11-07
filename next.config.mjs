@@ -6,6 +6,13 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  experimental: {
+    optimizePackageImports: [
+      'lucide-react',
+      '@tanstack/react-query',
+      '@base-ui/react',
+    ],
+  },
 }
 
 export default nextConfig

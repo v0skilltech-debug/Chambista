@@ -118,28 +118,40 @@ def create_or_update_perfil(
 
 
 @router.get("/")
-def list_providers(db: Session = Depends(get_db)):
-    """Lista todos los proveedores con su perfil."""
-    providers = db.query(models.Usuario).join(
+def list_providers(limit: int = 20, db: Session = Depends(get_db)):
+    """Lista proveedores con su perfil y rating promedio en una sola consulta optimizada."""
+    from sqlalchemy import func
+
+    subq = db.query(
+        models.Review.provider_id,
+        func.avg(models.Review.rating).label("avg_rating")
+    ).group_by(models.Review.provider_id).subquery()
+
+    rows = db.query(
+        models.Usuario.id,
+        models.Usuario.nombre,
+        models.PerfilPrestador.oficio_principal,
+        models.PerfilPrestador.zonas_atencion,
+        models.PerfilPrestador.foto_perfil,
+        func.coalesce(subq.c.avg_rating, 0.0).label("rating")
+    ).join(
         models.PerfilPrestador,
         models.Usuario.id == models.PerfilPrestador.usuario_id
+    ).outerjoin(
+        subq,
+        models.Usuario.id == subq.c.provider_id
     ).filter(
         models.Usuario.rol.in_(["trabajador", "independiente", "empresa", "proveedor"])
-    ).all()
+    ).limit(limit).all()
 
-    from sqlalchemy import func
-    results = []
-    for u in providers:
-        avg = db.query(func.avg(models.Review.rating)).filter(
-            models.Review.provider_id == u.id
-        ).scalar() or 0.0
-        perfil = u.perfil_prestador
-        results.append({
-            "id": u.id,
-            "nombre": u.nombre,
-            "oficio_principal": perfil.oficio_principal if perfil else None,
-            "zonas_atencion": perfil.zonas_atencion if perfil else None,
-            "rating": round(avg, 1),
-            "foto_perfil": perfil.foto_perfil if perfil else None,
-        })
-    return results
+    return [
+        {
+            "id": r.id,
+            "nombre": r.nombre,
+            "oficio_principal": r.oficio_principal,
+            "zonas_atencion": r.zonas_atencion,
+            "rating": round(float(r.rating), 1),
+            "foto_perfil": r.foto_perfil,
+        }
+        for r in rows
+    ]

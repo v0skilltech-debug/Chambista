@@ -1,7 +1,7 @@
 'use client'
 
 import type React from 'react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { Eye, EyeOff, ArrowRight, ShieldCheck, Star, Users, Zap, Home, Wrench, Building2 } from 'lucide-react'
 import { ChambistaLogo } from '@/components/chambista-logo'
@@ -11,34 +11,34 @@ import { Label } from '@/components/ui/label'
 
 const HERO_SLIDES = [
   {
-    src: '/providers/electricista.png',
-    label: 'Electricistas',
-    caption: 'Instalaciones y reparaciones eléctricas seguras',
+    src: '/providers/alonso-medina.png',
+    label: 'Gasfitería',
+    caption: 'Instalaciones y reparaciones rápidas con especialistas verificados',
   },
   {
-    src: '/providers/plomero.png',
-    label: 'Plomeros',
-    caption: 'Fugas, instalaciones y mantenimiento',
+    src: '/providers/camila-vargas.png',
+    label: 'Electricidad',
+    caption: 'Instalaciones seguras y tableros certificados para tu tranquilidad',
   },
   {
-    src: '/providers/carpintero.png',
-    label: 'Carpinteros',
-    caption: 'Muebles a medida y reparaciones de madera',
+    src: '/providers/jorge-delgado.png',
+    label: 'Carpintería',
+    caption: 'Muebles a medida, melamina y acabados de primera calidad',
   },
   {
-    src: '/providers/pintor.png',
-    label: 'Pintores',
-    caption: 'Acabados perfectos para tu espacio',
-  },
-  {
-    src: '/providers/tecnico.png',
-    label: 'Técnicos',
-    caption: 'Reparación de equipos y electrodomésticos',
-  },
-  {
-    src: '/providers/limpieza.png',
+    src: '/providers/elena-rivera.png',
     label: 'Limpieza',
-    caption: 'Hogares y oficinas limpias y relucientes',
+    caption: 'Hogares y oficinas relucientes con profesionales de confianza',
+  },
+  {
+    src: '/providers/bruno-caceres.png',
+    label: 'Cerrajería',
+    caption: 'Aperturas de emergencia, chapas de seguridad y copias al instante',
+  },
+  {
+    src: '/providers/lucas-condori.png',
+    label: 'Pintura',
+    caption: 'Acabados perfectos e interiores renovados sin complicaciones',
   },
 ]
 
@@ -52,19 +52,43 @@ export function AuthScreen() {
   const [loginError, setLoginError] = useState('')
   const [emailHint, setEmailHint] = useState('')
   const [slideIndex, setSlideIndex] = useState(0)
-  const [fading, setFading] = useState(false)
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  // Auto-advance carousel every 4 seconds
+  const startTimer = () => {
+    if (timerRef.current) clearInterval(timerRef.current)
+    timerRef.current = setInterval(() => {
+      setSlideIndex((prev) => (prev + 1) % HERO_SLIDES.length)
+    }, 4500)
+  }
+
+  // Auto-advance carousel smoothly
   useEffect(() => {
-    const timer = setInterval(() => {
-      setFading(true)
-      setTimeout(() => {
-        setSlideIndex(i => (i + 1) % HERO_SLIDES.length)
-        setFading(false)
-      }, 600)
-    }, 11000)
-    return () => clearInterval(timer)
+    startTimer()
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current)
+    }
   }, [])
+
+  // Detect active session and synchronize across browser tabs
+  useEffect(() => {
+    const checkSession = () => {
+      if (typeof window === 'undefined') return
+      const token = localStorage.getItem('chambista_token')
+      const rol = localStorage.getItem('chambista_rol')
+      if (token && rol) {
+        if (rol === 'cliente') router.push('/cliente')
+        else router.push('/dashboard')
+      }
+    }
+    checkSession()
+    window.addEventListener('storage', checkSession)
+    return () => window.removeEventListener('storage', checkSession)
+  }, [router])
+
+  const goToSlide = (index: number) => {
+    setSlideIndex(index)
+    startTimer()
+  }
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
@@ -109,7 +133,7 @@ export function AuthScreen() {
       title: 'Soy independiente',
       desc: 'Ofrezco mis servicios como persona natural',
       icon: <Wrench className="size-6 text-white" />,
-      href: '/onboarding',
+      href: '/onboarding?tipo=independiente',
       color: 'from-orange-500 to-amber-600',
     },
     {
@@ -117,7 +141,7 @@ export function AuthScreen() {
       title: 'Tengo una empresa',
       desc: 'Quiero captar más clientes para mi negocio',
       icon: <Building2 className="size-6 text-white" />,
-      href: '/onboarding',
+      href: '/onboarding?tipo=empresa',
       color: 'from-purple-500 to-violet-600',
     },
   ]
@@ -131,12 +155,14 @@ export function AuthScreen() {
         <ChambistaLogo />
         <div className="flex items-center gap-2">
           <button
+            type="button"
             onClick={() => setTab('login')}
             className={`text-sm font-medium px-4 py-2 rounded-full transition-colors ${tab === 'login' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
           >
             Iniciar sesión
           </button>
           <button
+            type="button"
             onClick={() => setTab('register')}
             className={`text-sm font-medium px-4 py-2 rounded-full transition-colors ${tab === 'register' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
           >
@@ -146,67 +172,68 @@ export function AuthScreen() {
       </header>
 
       <div className="flex flex-1 flex-col lg:flex-row">
-        {/* ── Left Panel: Image Carousel ── */}
-        <section className="relative hidden lg:flex lg:w-1/2 overflow-hidden">
-          {/* Slide image */}
-          <img
-            key={slideIndex}
-            src={currentSlide.src}
-            alt={currentSlide.label}
-            className="absolute inset-0 h-full w-full object-cover"
-            style={{
-              opacity: fading ? 0 : 1,
-              transition: 'opacity 0.6s ease-in-out',
-            }}
-          />
-
-          {/* Dark overlay gradient */}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/40 to-slate-900/20" />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/30 to-transparent" />
-
-          {/* Top-left: Logo + App name */}
-          <div className="absolute top-8 left-8 flex items-center gap-3 z-10">
+        {/* ── Left Panel: Image Carousel con puntos y transición suave ── */}
+        <section className="relative hidden lg:flex lg:w-1/2 overflow-hidden bg-[#0e1b5b]">
+          {/* Slide images con crossfade CSS puro sin parpadeo blanco */}
+          {HERO_SLIDES.map((slide, i) => (
             <img
-              src="/5447b5d0-2e72-43c0-bb40-a545a174aec4-removebg-preview.png"
-              alt="Chambista logo"
-              className="size-12 object-contain drop-shadow-lg"
+              key={slide.src}
+              src={slide.src}
+              alt={slide.label}
+              className="absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-in-out"
+              style={{
+                opacity: i === slideIndex ? 1 : 0,
+                pointerEvents: i === slideIndex ? 'auto' : 'none',
+              }}
             />
-            <div>
-              <p className="text-xl font-extrabold text-white leading-none tracking-tight">Chambista</p>
-              <p className="text-xs text-white/60 font-medium mt-0.5">Profesionales de confianza</p>
-            </div>
+          ))}
+
+          {/* Dark overlay gradient con Azul Marino Oficial (#0E1B5B) */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0e1b5b]/95 via-[#0e1b5b]/60 to-[#0e1b5b]/30" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1b5b]/50 to-transparent" />
+
+          {/* Top-left: Logo oficial Chambista */}
+          <div className="absolute top-8 left-8 z-10 flex items-center rounded-2xl bg-white/95 px-4 py-2 shadow-lg backdrop-blur-md">
+            <img
+              src="/logo-chambista-oficial.png"
+              alt="Chambista"
+              className="h-7 w-auto object-contain"
+            />
           </div>
 
           {/* Bottom content */}
-          <div
-            className="absolute bottom-0 left-0 right-0 z-10 p-8"
-            style={{ opacity: fading ? 0 : 1, transition: 'opacity 0.5s ease-in-out' }}
-          >
+          <div className="absolute bottom-0 left-0 right-0 z-10 p-8">
             {/* Category pill */}
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-sm">
-              <span className="size-1.5 rounded-full bg-secondary animate-pulse" />
-              {currentSlide.label} · Lima, Perú
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/15 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-sm transition-all duration-300">
+              <span className="size-2 rounded-full bg-[#ff8a00] animate-pulse" />
+              {currentSlide.label} · Lima y Arequipa, Perú
             </div>
 
-            <h2 className="text-3xl font-bold text-white leading-tight mb-1">
+            <h2 className="text-3xl font-bold text-white leading-tight mb-1 min-h-[72px] transition-all duration-300">
               {currentSlide.caption}
             </h2>
-            <p className="text-blue-200/70 text-sm leading-relaxed mb-5">
+            <p className="text-white/80 text-sm leading-relaxed mb-5">
               Conecta con quien sí sabe hacerlo. Sin vueltas, sin perder tiempo.
             </p>
 
-            {/* Social proof avatars */}
+            {/* Social proof avatars con fotos reales de especialistas */}
             <div className="flex items-center gap-3 mb-5">
               <div className="flex -space-x-2">
-                {['ML', 'CM', 'AT', '+'].map((init, i) => (
-                  <div key={i} className={`flex size-8 items-center justify-center rounded-full border-2 border-slate-950 text-[11px] font-bold text-white ${i === 3 ? 'bg-primary' : 'bg-gradient-to-br from-blue-400 to-blue-600'}`}>
-                    {init}
-                  </div>
+                {['/providers/mateo-quispe.png', '/providers/paola-mamani.png', '/providers/renata-paredes.png'].map((src, i) => (
+                  <img
+                    key={i}
+                    src={src}
+                    alt="Especialista Chambista"
+                    className="size-8 rounded-full border-2 border-white object-cover shadow-sm"
+                  />
                 ))}
+                <div className="flex size-8 items-center justify-center rounded-full border-2 border-white bg-[#ff8a00] text-[11px] font-bold text-white shadow-sm">
+                  +14
+                </div>
               </div>
               <div>
-                <div className="flex text-secondary text-xs">{'★'.repeat(5)}</div>
-                <p className="text-white/60 text-[11px]">+2,000 personas confían en Chambista</p>
+                <div className="flex text-[#ff8a00] text-xs">{'★'.repeat(5)}</div>
+                <p className="text-white/70 text-[11px]">+2,000 personas confían en Chambista</p>
               </div>
             </div>
 
@@ -224,16 +251,28 @@ export function AuthScreen() {
               ))}
             </div>
 
-            {/* Slide dots */}
-            <div className="flex items-center gap-1.5">
-              {HERO_SLIDES.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => { setFading(true); setTimeout(() => { setSlideIndex(i); setFading(false) }, 400) }}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${i === slideIndex ? 'bg-white w-5' : 'bg-white/40 w-1.5'}`}
-                  aria-label={`Ir a slide ${i + 1}`}
-                />
-              ))}
+            {/* Slide dots interactivos y conectados */}
+            <div className="flex items-center gap-1 py-1">
+              {HERO_SLIDES.map((slide, i) => {
+                const isActive = i === slideIndex
+                return (
+                  <button
+                    key={slide.src}
+                    type="button"
+                    onClick={() => goToSlide(i)}
+                    aria-label={`Ver ${slide.label} (${i + 1} de ${HERO_SLIDES.length})`}
+                    className="group flex items-center justify-center p-2 focus:outline-none"
+                  >
+                    <span
+                      className={`block h-2 rounded-full transition-all duration-300 ${
+                        isActive
+                          ? 'bg-[#ff8a00] w-7 shadow-xs'
+                          : 'bg-white/40 group-hover:bg-white/80 w-2'
+                      }`}
+                    />
+                  </button>
+                )
+              })}
             </div>
           </div>
         </section>
@@ -241,6 +280,45 @@ export function AuthScreen() {
         {/* Right Panel - Forms */}
         <section className="flex w-full flex-1 items-center justify-center p-6 lg:w-1/2 bg-white">
           <div className="w-full max-w-md">
+            {/* Mobile Slider Preview con Puntos */}
+            <div className="lg:hidden mb-6 overflow-hidden rounded-2xl relative bg-[#0e1b5b] p-4 text-white shadow-md">
+              <div className="flex items-center gap-3">
+                <img
+                  src={currentSlide.src}
+                  alt={currentSlide.label}
+                  className="size-16 rounded-xl object-cover border-2 border-white/20 shrink-0 shadow-xs"
+                />
+                <div className="min-w-0 flex-1">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-white/20 px-2 py-0.5 text-[10px] font-bold text-white mb-1">
+                    <span className="size-1.5 rounded-full bg-[#ff8a00] animate-pulse" />
+                    {currentSlide.label}
+                  </span>
+                  <p className="text-xs font-semibold leading-snug line-clamp-2 text-white/90">
+                    {currentSlide.caption}
+                  </p>
+                </div>
+              </div>
+
+              {/* Mobile Slide dots */}
+              <div className="mt-3 flex items-center justify-center gap-1 border-t border-white/10 pt-2">
+                {HERO_SLIDES.map((slide, i) => (
+                  <button
+                    key={slide.src}
+                    type="button"
+                    onClick={() => goToSlide(i)}
+                    aria-label={`Ver ${slide.label}`}
+                    className="p-1.5 focus:outline-none"
+                  >
+                    <span
+                      className={`block h-1.5 rounded-full transition-all duration-300 ${
+                        i === slideIndex ? 'bg-[#ff8a00] w-6' : 'bg-white/40 w-1.5'
+                      }`}
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {tab === 'login' ? (
               <>
                 <div className="mb-8">
@@ -248,7 +326,7 @@ export function AuthScreen() {
                   <p className="mt-1 text-muted-foreground">Ingresa a tu cuenta para continuar.</p>
                 </div>
 
-                <form onSubmit={handleLogin} className="space-y-5">
+                <form onSubmit={handleLogin} action="#" method="POST" className="space-y-5">
                   <div className="space-y-2">
                     <Label htmlFor="login-email">Correo electrónico</Label>
                     <Input
@@ -295,11 +373,33 @@ export function AuthScreen() {
                   <Button type="submit" size="lg" className="w-full gap-2">
                     Iniciar sesión <ArrowRight className="size-4" />
                   </Button>
+
+                  <div className="relative my-4">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-border" />
+                    </div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                      <span className="bg-white px-2 text-muted-foreground font-semibold">o explora sin cuenta</span>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      localStorage.setItem('chambista_rol', 'cliente')
+                      localStorage.setItem('chambista_nombre', 'Cliente Invitado')
+                      router.push('/cliente')
+                    }}
+                    className="w-full flex items-center justify-center gap-2 rounded-xl border border-primary/30 bg-primary/5 py-3 text-sm font-bold text-primary transition hover:bg-primary/10 active:scale-[0.98]"
+                  >
+                    <span>Explorar como Cliente</span>
+                    <ArrowRight className="size-4" />
+                  </button>
                 </form>
 
                 <p className="mt-6 text-center text-sm text-muted-foreground">
                   ¿No tienes cuenta?{' '}
-                  <button onClick={() => setTab('register')} className="font-semibold text-primary hover:underline">
+                  <button type="button" onClick={() => setTab('register')} className="font-semibold text-primary hover:underline">
                     Crear cuenta gratis
                   </button>
                 </p>
@@ -315,6 +415,7 @@ export function AuthScreen() {
                   {accountTypes.map((type) => (
                     <button
                       key={type.id}
+                      type="button"
                       onClick={() => router.push(type.href)}
                       className="group flex items-center gap-4 rounded-2xl border-2 border-border bg-white p-4 text-left transition-all hover:border-primary hover:shadow-md hover:shadow-primary/10 active:scale-[0.98]"
                     >
@@ -332,7 +433,7 @@ export function AuthScreen() {
 
                 <p className="mt-6 text-center text-sm text-muted-foreground">
                   ¿Ya tienes cuenta?{' '}
-                  <button onClick={() => setTab('login')} className="font-semibold text-primary hover:underline">
+                  <button type="button" onClick={() => setTab('login')} className="font-semibold text-primary hover:underline">
                     Iniciar sesión
                   </button>
                 </p>

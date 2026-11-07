@@ -41,6 +41,23 @@ export type Provider = {
   priceFrom?: number
   tagline?: string
   jobsDone?: number
+  // Empresa specific initial fields
+  isEmpresa?: boolean
+  chatDisabled?: boolean
+  nombre?: string
+  servicio?: string
+  ubicacion?: string
+  calificacion?: string
+  reviewsCount?: number
+  ruc?: string
+  correo?: string
+  telefono?: string
+  phone?: string
+  telefonoClean?: string
+  logo?: string | null
+  link?: string
+  badgeText?: string
+  infoRaw?: string
 }
 
 export type Category = {
@@ -78,7 +95,176 @@ export const categories: Category[] = [
 
 // ─── Providers ───────────────────────────────────────────────────────────────
 
-export const providers: Provider[] = []
+export const providers: Provider[] = [
+  {
+    id: 'alonso-medina',
+    name: 'Alonso Medina',
+    trade: 'Gasfitería & Plomería',
+    rating: 4.9,
+    reviews: 38,
+    price: 'S/. 45',
+    priceUnit: 'visita / diagnóstico',
+    district: 'Cayma, Arequipa',
+    responseTime: '< 30 min',
+    completionRate: 98,
+    avatar: '/providers/alonso-medina.png',
+    photo: '/providers/alonso-medina.png',
+    verified: true,
+    featured: true,
+    categoryId: 'gasfiteria',
+    categoryName: 'Gasfitería',
+    bio: 'Más de 10 años resolviendo fugas, desatoros e instalaciones sanitarias en toda Arequipa.',
+    tags: ['Fugas de agua', 'Desatoros', 'Grifería', 'Termas'],
+    jobsDone: 142,
+  },
+  {
+    id: 'camila-vargas',
+    name: 'Camila Vargas',
+    trade: 'Electricidad Residencial & Comercial',
+    rating: 4.8,
+    reviews: 29,
+    price: 'S/. 50',
+    priceUnit: 'revisión técnica',
+    district: 'Yanahuara, Arequipa',
+    responseTime: '< 45 min',
+    completionRate: 99,
+    avatar: '/providers/camila-vargas.png',
+    photo: '/providers/camila-vargas.png',
+    verified: true,
+    featured: true,
+    categoryId: 'electricidad',
+    categoryName: 'Electricidad',
+    bio: 'Técnica electricista certificada. Especialista en tableros, cableados e iluminación LED segura.',
+    tags: ['Cortocircuitos', 'Tableros', 'Iluminación', 'Puestas a tierra'],
+    jobsDone: 96,
+  },
+  {
+    id: 'bruno-caceres',
+    name: 'Bruno Cáceres',
+    trade: 'Cerrajería de Emergencia',
+    rating: 5.0,
+    reviews: 44,
+    price: 'S/. 40',
+    priceUnit: 'apertura',
+    district: 'José Luis Bustamante, Arequipa',
+    responseTime: '< 20 min',
+    completionRate: 100,
+    avatar: '/providers/bruno-caceres.png',
+    photo: '/providers/bruno-caceres.png',
+    verified: true,
+    featured: true,
+    categoryId: 'cerrajeria',
+    categoryName: 'Cerrajería',
+    bio: 'Apertura de puertas sin dañar cerraduras. Chapas de alta seguridad residenciales y vehiculares.',
+    tags: ['Aperturas 24/7', 'Chapas de seguridad', 'Duplicados', 'Cerraduras digitales'],
+    jobsDone: 210,
+  },
+  {
+    id: 'elena-rivera',
+    name: 'Elena Rivera',
+    trade: 'Limpieza Profunda & Desinfección',
+    rating: 4.9,
+    reviews: 52,
+    price: 'S/. 70',
+    priceUnit: 'jornada 4h',
+    district: 'Miraflores, Arequipa',
+    responseTime: '< 1 hora',
+    completionRate: 97,
+    avatar: '/providers/elena-rivera.png',
+    photo: '/providers/elena-rivera.png',
+    verified: true,
+    featured: true,
+    categoryId: 'limpieza',
+    categoryName: 'Limpieza',
+    bio: 'Servicios integrales de limpieza para departamentos, casas y oficinas con insumos ecológicos.',
+    tags: ['Limpieza profunda', 'Post mudanza', 'Vidrios en altura', 'Oficinas'],
+    jobsDone: 185,
+  },
+  {
+    id: 'jorge-delgado',
+    name: 'Jorge Delgado',
+    trade: 'Carpintería & Melamina',
+    rating: 4.7,
+    reviews: 31,
+    price: 'S/. 60',
+    priceUnit: 'cotización en sitio',
+    district: 'Cerro Colorado, Arequipa',
+    responseTime: '< 2 horas',
+    completionRate: 96,
+    avatar: '/providers/jorge-delgado.png',
+    photo: '/providers/jorge-delgado.png',
+    verified: true,
+    featured: true,
+    categoryId: 'carpinteria',
+    categoryName: 'Carpintería',
+    bio: 'Muebles de cocina a medida, closets, reposteros y reparación de puertas y estructuras de madera.',
+    tags: ['Melamina', 'Muebles a medida', 'Puertas', 'Ajustes y bisagras'],
+    jobsDone: 88,
+  },
+  {
+    id: 'lucas-condori',
+    name: 'Lucas Condori',
+    trade: 'Pintura & Empastado',
+    rating: 4.8,
+    reviews: 24,
+    price: 'S/. 55',
+    priceUnit: 'm² estimado',
+    district: 'Arequipa Centro',
+    responseTime: '< 1 hora',
+    completionRate: 95,
+    avatar: '/providers/lucas-condori.png',
+    photo: '/providers/lucas-condori.png',
+    verified: true,
+    featured: false,
+    categoryId: 'pintura',
+    categoryName: 'Pintura',
+    bio: 'Acabados impecables en pintura látex, óleo, empastados y tratamiento antihumedad.',
+    tags: ['Pintado interior', 'Fachadas', 'Empaste', 'Antihumedad'],
+    jobsDone: 73,
+  },
+  {
+    id: 'diego-salazar',
+    name: 'Diego Salazar',
+    trade: 'Refrigeración & Climatización',
+    rating: 4.9,
+    reviews: 19,
+    price: 'S/. 65',
+    priceUnit: 'mantenimiento',
+    district: 'Cayma, Arequipa',
+    responseTime: '< 1 hora',
+    completionRate: 98,
+    avatar: '/providers/diego-salazar.png',
+    photo: '/providers/diego-salazar.png',
+    verified: true,
+    featured: false,
+    categoryId: 'refrigeracion',
+    categoryName: 'Refrigeración',
+    bio: 'Carga de gas, reparación de refrigeradoras no frost, congeladoras y aire acondicionado.',
+    tags: ['Refrigeradoras', 'Carga de gas', 'Aire acondicionado', 'Congeladoras'],
+    jobsDone: 64,
+  },
+  {
+    id: 'sofia-nunez',
+    name: 'Sofía Núñez',
+    trade: 'Fumigación & Control de Plagas',
+    rating: 4.9,
+    reviews: 35,
+    price: 'S/. 90',
+    priceUnit: 'servicio certificado',
+    district: 'Yanahuara, Arequipa',
+    responseTime: '< 2 horas',
+    completionRate: 100,
+    avatar: '/providers/sofia-nunez.png',
+    photo: '/providers/sofia-nunez.png',
+    verified: true,
+    featured: false,
+    categoryId: 'fumigacion',
+    categoryName: 'Fumigación',
+    bio: 'Control seguro y certificado de plagas para residencias, restaurantes y comercios con certificado MINSA.',
+    tags: ['Desinsectación', 'Desratización', 'Certificado oficial', 'Cero olores'],
+    jobsDone: 112,
+  }
+]
 
 export const recentProviders: Provider[] = providers.slice(0, 3)
 

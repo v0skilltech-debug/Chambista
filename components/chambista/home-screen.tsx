@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from "react"
 import type { Category } from "@/lib/chambista-data"
+import { EMPRESAS_LIST } from "@/lib/empresas-data"
 import { AdSlider } from "./ad-slider"
 import { CategoryGrid } from "./category-grid"
-import { Sparkles, TrendingUp, Star, MapPin, Briefcase } from "lucide-react"
+import { EmpresaCard } from "./empresa-card"
+import { Sparkles, TrendingUp, Star, MapPin, Briefcase, Building2, ArrowRight, Phone, MessageCircle } from "lucide-react"
 
 type ProviderFromDB = {
   id: number
@@ -15,36 +17,131 @@ type ProviderFromDB = {
   foto_perfil: string | null
 }
 
+const DEFAULT_FEATURED: ProviderFromDB[] = [
+  {
+    id: 1,
+    nombre: "Alonso Medina",
+    oficio_principal: "Gasfitería & Plomería",
+    zonas_atencion: "Arequipa · Cayma · Yanahuara",
+    rating: 4.9,
+    foto_perfil: "/providers/alonso-medina.png"
+  },
+  {
+    id: 2,
+    nombre: "Camila Vargas",
+    oficio_principal: "Electricidad Certificada",
+    zonas_atencion: "Cerro Colorado · Yanahuara",
+    rating: 4.8,
+    foto_perfil: "/providers/camila-vargas.png"
+  },
+  {
+    id: 3,
+    nombre: "Bruno Cáceres",
+    oficio_principal: "Cerrajería & Seguridad",
+    zonas_atencion: "José Luis Bustamante · Centro",
+    rating: 5.0,
+    foto_perfil: "/providers/bruno-caceres.png"
+  },
+  {
+    id: 4,
+    nombre: "Elena Rivera",
+    oficio_principal: "Limpieza Profunda & Desinfección",
+    zonas_atencion: "Miraflores · Yanahuara · Cayma",
+    rating: 4.9,
+    foto_perfil: "/providers/elena-rivera.png"
+  },
+  {
+    id: 5,
+    nombre: "Jorge Delgado",
+    oficio_principal: "Carpintería & Melamina",
+    zonas_atencion: "Arequipa · Toda la ciudad",
+    rating: 4.7,
+    foto_perfil: "/providers/jorge-delgado.png"
+  },
+  {
+    id: 6,
+    nombre: "Lucas Condori",
+    oficio_principal: "Pintura & Acabados",
+    zonas_atencion: "Cayma · Cerro Colorado",
+    rating: 4.8,
+    foto_perfil: "/providers/lucas-condori.png"
+  }
+]
+
+let cachedFeaturedProviders: ProviderFromDB[] | null = null
+
 export function HomeScreen({
   onSelectProvider,
   onSelectCategory,
+  onGoToEmpresas,
 }: {
   onSelectProvider: (p: any) => void
   onSelectCategory: (categoryId: string) => void
+  onGoToEmpresas?: () => void
 }) {
-  const [featured, setFeatured] = useState<ProviderFromDB[]>([])
-  const [loadingProviders, setLoadingProviders] = useState(true)
+  const [featured, setFeatured] = useState<ProviderFromDB[]>(() => cachedFeaturedProviders || DEFAULT_FEATURED)
+  const [loadingProviders, setLoadingProviders] = useState(false)
 
   useEffect(() => {
+    if (cachedFeaturedProviders) return
     fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/providers/`)
       .then(r => r.json())
       .then(data => {
-        if (Array.isArray(data)) {
-          // Show up to 6 real providers
-          setFeatured(data.slice(0, 6))
+        if (Array.isArray(data) && data.length > 0) {
+          cachedFeaturedProviders = data.slice(0, 6)
+          setFeatured(cachedFeaturedProviders)
         }
       })
-      .catch(console.error)
+      .catch(() => {
+        // Mantiene DEFAULT_FEATURED con fotos oficiales
+      })
       .finally(() => setLoadingProviders(false))
   }, [])
 
   return (
     <div className="flex flex-col gap-8 py-6 pb-4">
       {/* Hero slider */}
-      <AdSlider />
+      <AdSlider onSelectEmpresa={onSelectProvider} onGoToEmpresas={onGoToEmpresas} />
 
       {/* Categories */}
       <CategoryGrid onSelect={(c: Category) => onSelectCategory(c.id)} />
+
+      {/* ─── Cartas de Presentación & Anuncios Iniciales (Empresas) ─── */}
+      <section aria-label="Cartas de Presentacion" className="px-4 lg:px-8">
+        <div className="mb-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="flex size-7 items-center justify-center rounded-lg bg-primary/10">
+              <Building2 className="size-4 text-primary" />
+            </span>
+            <div>
+              <h2 className="font-sans text-lg font-bold text-foreground leading-tight">
+                Cartas de Presentación & Anuncios Iniciales
+              </h2>
+              <p className="text-xs text-muted-foreground">Directorio comercial de empresas en Arequipa</p>
+            </div>
+          </div>
+          {onGoToEmpresas && (
+            <button
+              type="button"
+              onClick={onGoToEmpresas}
+              className="flex items-center gap-1 text-xs font-bold text-primary hover:underline"
+            >
+              <span>Ver todas ({EMPRESAS_LIST.length})</span>
+              <ArrowRight className="size-3.5" />
+            </button>
+          )}
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {EMPRESAS_LIST.slice(0, 6).map((empresa) => (
+            <EmpresaCard
+              key={empresa.id}
+              empresa={empresa}
+              onSelect={onSelectProvider}
+            />
+          ))}
+        </div>
+      </section>
 
       {/* Featured section */}
       <section aria-label="Destacados" className="px-4 lg:px-8">
@@ -53,7 +150,7 @@ export function HomeScreen({
             <span className="flex size-7 items-center justify-center rounded-lg bg-primary/10">
               <TrendingUp className="size-4 text-primary" />
             </span>
-            <h2 className="font-sans text-lg font-bold text-foreground">Destacados cerca de ti</h2>
+            <h2 className="font-sans text-lg font-bold text-foreground">Técnicos & Profesionales cerca de ti</h2>
           </div>
         </div>
 
@@ -80,6 +177,7 @@ export function HomeScreen({
             {featured.map((p) => (
               <button
                 key={p.id}
+                type="button"
                 onClick={() => onSelectProvider({
                   id: p.id.toString(),
                   name: p.nombre,
@@ -137,8 +235,8 @@ export function HomeScreen({
           <div className="grid grid-cols-3 gap-4">
             {[
               { value: "500+", label: "Profesionales" },
+              { value: "25+", label: "Empresas Anunciantes" },
               { value: "4.8★", label: "Calificación promedio" },
-              { value: "30min", label: "Tiempo de respuesta" },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
                 <p className="text-xl font-extrabold">{stat.value}</p>

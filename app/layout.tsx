@@ -58,16 +58,32 @@ export default function RootLayout({
           {children}
           {process.env.NODE_ENV === 'production' && <Analytics />}
         </QueryProvider>
-        {/* PWA Service Worker registration */}
+        {/* PWA Service Worker handling: unregister on dev/localhost to avoid caching issues, register in production */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
               if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js')
-                    .then(function(reg) { console.log('[SW] Registrado:', reg.scope); })
-                    .catch(function(err) { console.warn('[SW] Error:', err); });
-                });
+                var isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                if (isDev) {
+                  navigator.serviceWorker.getRegistrations().then(function(regs) {
+                    for (var i = 0; i < regs.length; i++) {
+                      regs[i].unregister();
+                    }
+                  });
+                  if ('caches' in window) {
+                    caches.keys().then(function(keys) {
+                      for (var j = 0; j < keys.length; j++) {
+                        caches.delete(keys[j]);
+                      }
+                    });
+                  }
+                } else {
+                  window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('/sw.js')
+                      .then(function(reg) { console.log('[SW] Registrado:', reg.scope); })
+                      .catch(function(err) { console.warn('[SW] Error:', err); });
+                  });
+                }
               }
             `,
           }}

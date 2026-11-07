@@ -30,13 +30,20 @@ self.addEventListener('activate', (event) => {
   self.clients.claim()
 })
 
-// Fetch: network-first for API calls, cache-first for everything else
+// Fetch: network-first for HTML pages and APIs, cache-first for static assets
 self.addEventListener('fetch', (event) => {
   const { request } = event
   const url = new URL(request.url)
 
-  // Skip non-GET and API requests (always go network for API)
-  if (request.method !== 'GET' || url.pathname.startsWith('/api/')) {
+  if (request.method !== 'GET') {
+    return
+  }
+
+  // Network-first for HTML page navigations and API calls
+  if (request.mode === 'navigate' || url.pathname.startsWith('/api/')) {
+    event.respondWith(
+      fetch(request).catch(() => caches.match(request))
+    )
     return
   }
 

@@ -90,6 +90,7 @@ def search_providers(req: schemas.SearchRequest, db: Session = Depends(get_db)):
         final_results.append({
             "id": user.id,
             "nombre": f"{user.nombre} {user.apellidos or ''}".strip(),
+            "telefono": user.telefono,
             "oficios": perfil.oficio_principal or "Servicios Generales",
             "zonas_atencion": perfil.zonas_atencion or "Lima",
             "rating": rating_val,

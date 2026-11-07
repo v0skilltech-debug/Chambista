@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="chambista-avatar" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0e1b5b"/>
+      <stop offset="50%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#ff8a00"/>
+    </linearGradient>
+  </defs>
+  <rect width="120" height="120" rx="24" fill="url(#chambista-avatar)"/>
+  <circle cx="60" cy="46" r="20" fill="#ffffff" opacity="0.9"/>
+  <path d="M26 102 C26 78, 42 72, 60 72 C78 72, 94 78, 94 102 Z" fill="#ffffff" opacity="0.9"/>
+</svg>
+

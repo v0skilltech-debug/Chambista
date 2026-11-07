@@ -15,8 +15,8 @@ def get_provider_dashboard(
     """
     Dashboard del proveedor. Requiere autenticación obligatoria del prestador.
     """
-    # IDOR / Role Prevention: Ensure the authenticated user is a provider/worker
-    if current_user.rol not in ["trabajador", "independiente", "empresa", "proveedor"]:
+    perfil = db.query(models.PerfilPrestador).filter(models.PerfilPrestador.usuario_id == current_user.id).first()
+    if current_user.rol not in ["trabajador", "independiente", "empresa", "proveedor"] and not perfil:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Acceso denegado. Este dashboard es exclusivo para proveedores de servicios."
@@ -27,8 +27,6 @@ def get_provider_dashboard(
     provider = db.query(models.Usuario).filter(models.Usuario.id == resolved_id).first()
     if not provider:
         raise HTTPException(status_code=404, detail="Proveedor no encontrado")
-
-    perfil = db.query(models.PerfilPrestador).filter(models.PerfilPrestador.usuario_id == resolved_id).first()
     
     # Obtener reservas/trabajos
     bookings = db.query(models.Booking).filter(models.Booking.provider_id == resolved_id).all()
@@ -46,11 +44,13 @@ def get_provider_dashboard(
     for b in bookings:
         cliente = db.query(models.Usuario).filter(models.Usuario.id == b.cliente_id).first()
         cliente_nombre = f"{cliente.nombre} {cliente.apellidos or ''}".strip() if cliente else "Cliente Desconocido"
+        cliente_telefono = cliente.telefono if cliente and cliente.telefono else ""
         
         item = {
             "id": b.id,
             "servicio": b.servicio or "Servicio Genérico",
             "cliente": cliente_nombre,
+            "telefono": cliente_telefono,
             "fecha": b.fecha or "Sin fecha",
             "hora": b.hora or "Sin hora",
             "estado": b.estado,

@@ -21,16 +21,13 @@ import { SectionResumen } from './section-resumen'
 import { SectionSolicitudes } from './section-solicitudes'
 import { SectionAgenda } from './section-agenda'
 import { SectionResenas } from './section-resenas'
-import { SectionMensajes } from './section-mensajes'
-import { MessageSquare } from 'lucide-react'
 
-type Section = 'resumen' | 'solicitudes' | 'agenda' | 'resenas' | 'mensajes'
+type Section = 'resumen' | 'solicitudes' | 'agenda' | 'resenas'
 
 const NAV: { id: Section; label: string; icon: typeof LayoutDashboard }[] = [
   { id: 'resumen', label: 'Resumen', icon: LayoutDashboard },
   { id: 'solicitudes', label: 'Solicitudes', icon: Inbox },
   { id: 'agenda', label: 'Agenda', icon: CalendarDays },
-  { id: 'mensajes', label: 'Mensajes', icon: MessageSquare },
   { id: 'resenas', label: 'Reseñas', icon: Star },
 ]
 
@@ -38,7 +35,6 @@ const TITULOS: Record<Section, string> = {
   resumen: 'Resumen',
   solicitudes: 'Solicitudes de trabajo',
   agenda: 'Mi agenda',
-  mensajes: 'Mis mensajes',
   resenas: 'Reseñas recibidas',
 }
 
@@ -46,7 +42,7 @@ export function DashboardShell() {
   const router = useRouter()
   const [section, setSection] = useState<Section>('resumen')
   const [mobileNav, setMobileNav] = useState(false)
-  
+
   const { data, isLoading } = useProviderDashboard()
 
   const nuevas = data ? data.solicitudes.filter((s: any) => s.estado === 'nueva').length : 0
@@ -176,7 +172,6 @@ export function DashboardShell() {
           {section === 'resumen' && <SectionResumen onNavigate={setSection} />}
           {section === 'solicitudes' && <SectionSolicitudes />}
           {section === 'agenda' && <SectionAgenda />}
-          {section === 'mensajes' && <SectionMensajes />}
           {section === 'resenas' && <SectionResenas />}
         </main>
       </div>
